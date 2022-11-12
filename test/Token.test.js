@@ -6,40 +6,41 @@ const tokens = (n) => {
 };
 
 describe("Token", () => {
-  let token;
+  let token, accounts, deployer;
 
   beforeEach(async () => {
     // Fetch token from blockchain
     const Token = await ethers.getContractFactory("Token");
     // Simulate token deployment to blockchain
     token = await Token.deploy("Dapp University", "DAPP", "1000000");
+    accounts = await ethers.getSigners();
+    deployer = accounts[0];
   });
 
   describe("Deployment", () => {
-    const nameTest = "Dapp University";
-    const symbolTest = "DAPP";
-    const decimalsTest = "18";
-    const totalSupplyTest = "1000000";
+    const name = "Dapp University";
+    const symbol = "DAPP";
+    const decimals = "18";
+    const totalSupply = tokens("1000000");
     // Test go inside here
     it("Has correct name name", async () => {
-      const name = await token.name();
-      expect(name).to.equal(nameTest);
+      expect(await token.name()).to.equal(name);
     });
 
     it("Has correct symbol", async () => {
-      const symbol = await token.symbol();
-      expect(symbol).to.equal(symbolTest);
+      expect(await token.symbol()).to.equal(symbol);
     });
 
     it("Has correct decimals", async () => {
-      const decimals = await token.decimals();
-      expect(decimals).to.equal(decimalsTest);
+      expect(await token.decimals()).to.equal(decimals);
     });
 
     it("Has correct total supply", async () => {
-      const value = tokens(totalSupplyTest);
-      const totalSupply = await token.totalSupply();
-      expect(totalSupply).to.equal(value);
+      expect(await token.totalSupply()).to.equal(totalSupply);
+    });
+
+    it("assigns total supply to deployer", async () => {
+      expect(await token.balanceOf(deployer.address)).to.equal(totalSupply);
     });
   });
 });
