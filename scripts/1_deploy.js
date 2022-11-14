@@ -6,7 +6,7 @@ async function main() {
   const Token = await ethers.getContractFactory("Token");
 
   // Deploy contract (deploy function from ethers)
-  const token = await Token.deploy();
+  const token = await Token.deploy("Dapp University", "DAPP", "1000000");
   // Get information that was deployed
   await token.deployed();
   console.log(`Token Deployed to: ${token.address}`);
